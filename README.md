@@ -25,9 +25,56 @@
 
 ---
 
-## 📦 Installation
+## 📦 Installation & 🛠 Usage
 
 Install the latest version from PyPI:
 
 ```bash
 pip install us-trade-api
+```
+
+Then, use it as follows:
+
+```python
+from us_trade_api import USTrade
+
+API_KEY = "your_api_key_here"
+
+# 📤 Example 1: Export Data from United Kingdom (Jan 2020, HS2-level, with transport mode)
+trade_exports_in_month = USTrade(
+    api_key=API_KEY,
+    year="2020",
+    month="01",
+    country_iso_code="GB",
+    aggregation_level_granularity="hs2",
+    aggregation_level_transport="yes", 
+    aggregation_level_period="year"
+)
+
+df_exports_test = trade_exports_in_month.get_exports_data()
+
+if df_exports_test is not None:
+    print(df_exports_test.head())
+else:
+    print("Failed to get export data.")
+
+# 📥 Example 2: Import Data from France (All months in 2020, HS2 section-level, no transport mode)
+trade_imports_in_month = USTrade(
+    api_key=API_KEY,
+    year="2020",
+    month="*",
+    country_iso_code="FR",
+    aggregation_level_granularity="hs2_section",
+    aggregation_level_transport="no", 
+    aggregation_level_period="month"
+)
+
+df_imports_test = trade_imports_in_month.get_imports_data()
+
+if df_imports_test is not None:
+    print(df_imports_test.head())
+else:
+    print("Failed to get import data.")
+```
+
+    print("Failed to get data or data is empty.")
